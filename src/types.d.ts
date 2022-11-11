@@ -4227,6 +4227,11 @@ declare namespace bigquery {
        * Page token, returned by a previous call, to request the next page of results
        */
       pageToken?: string;
+
+      /**
+       * Override projectId
+       */
+       projectId?: string;
     };
   }
 

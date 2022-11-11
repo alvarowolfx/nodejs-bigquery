@@ -1719,6 +1719,7 @@ export class BigQuery extends Service {
 
     this.request(
       {
+        projectId: options.projectId,
         uri: '/datasets',
         qs: options,
       },
