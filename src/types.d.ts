@@ -51,6 +51,20 @@ declare namespace bigquery {
   };
 
   /**
+   * Represents privacy policy associated with "aggregation threshold" method.
+   */
+  type IAggregationThresholdPolicy = {
+    /**
+     * Optional. The privacy unit column(s) associated with this policy. For now, only one column per data source object (table, view) is allowed as a privacy unit column. Representing as a repeated field in metadata for extensibility to multiple columns in future. Duplicates and Repeated struct fields are not allowed. For nested fields, use dot notation ("outer.inner")
+     */
+    privacyUnitColumns?: Array<string>;
+    /**
+     * Optional. The threshold for the "aggregation threshold" policy.
+     */
+    threshold?: string;
+  };
+
+  /**
    * Input/output argument of a function or a stored procedure.
    */
   type IArgument = {
@@ -62,6 +76,10 @@ declare namespace bigquery {
      * Required unless argument_kind = ANY_TYPE.
      */
     dataType?: IStandardSqlDataType;
+    /**
+     * Optional. Whether the argument is an aggregate function parameter. Must be Unset for routine types other than AGGREGATE_FUNCTION. For AGGREGATE_FUNCTION, if set to false, it is equivalent to adding "NOT AGGREGATE" clause in DDL; Otherwise, it is equivalent to omitting "NOT AGGREGATE" clause in DDL.
+     */
+    isAggregate?: boolean;
     /**
      * Optional. Specifies whether the argument is input or output. Can be set for procedures only.
      */
@@ -119,7 +137,9 @@ declare namespace bigquery {
     /**
      * Repeated as there can be many metric sets (one for each model) in auto-arima and the large-scale case.
      */
-    arimaSingleModelForecastingMetrics?: Array<IArimaSingleModelForecastingMetrics>;
+    arimaSingleModelForecastingMetrics?: Array<
+      IArimaSingleModelForecastingMetrics
+    >;
     /**
      * Whether Arima model fitted with drift or not. It is always false when d is not 1.
      */
@@ -520,7 +540,7 @@ declare namespace bigquery {
      */
     condition?: IExpr;
     /**
-     * Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
+     * Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `principal://iam.googleapis.com/locations/global/workforcePools/{pool_id}/subject/{subject_attribute_value}`: A single identity in a workforce identity pool. * `principalSet://iam.googleapis.com/locations/global/workforcePools/{pool_id}/group/{group_id}`: All workforce identities in a group. * `principalSet://iam.googleapis.com/locations/global/workforcePools/{pool_id}/attribute.{attribute_name}/{attribute_value}`: All workforce identities with a specific attribute value. * `principalSet://iam.googleapis.com/locations/global/workforcePools/{pool_id}/*`: All identities in a workforce identity pool. * `principal://iam.googleapis.com/projects/{project_number}/locations/global/workloadIdentityPools/{pool_id}/subject/{subject_attribute_value}`: A single identity in a workload identity pool. * `principalSet://iam.googleapis.com/projects/{project_number}/locations/global/workloadIdentityPools/{pool_id}/group/{group_id}`: A workload identity pool group. * `principalSet://iam.googleapis.com/projects/{project_number}/locations/global/workloadIdentityPools/{pool_id}/attribute.{attribute_name}/{attribute_value}`: All identities in a workload identity pool with a certain attribute. * `principalSet://iam.googleapis.com/projects/{project_number}/locations/global/workloadIdentityPools/{pool_id}/*`: All identities in a workload identity pool. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `deleted:principal://iam.googleapis.com/locations/global/workforcePools/{pool_id}/subject/{subject_attribute_value}`: Deleted single identity in a workforce identity pool. For example, `deleted:principal://iam.googleapis.com/locations/global/workforcePools/my-pool-id/subject/my-subject-attribute-value`.
      */
     members?: Array<string>;
     /**
@@ -722,7 +742,7 @@ declare namespace bigquery {
     /**
      * [Optional] An custom string that will represent a NULL value in CSV import data.
      */
-    null_marker?: string;
+    nullMarker?: string;
     /**
      * [Optional] Preserves the embedded ASCII control characters (the first 32 characters in the ASCII-table, from '\x00' to '\x1F') when loading from CSV. Only applicable to CSV, ignored for other formats.
      */
@@ -860,7 +880,7 @@ declare namespace bigquery {
     /**
      * The labels associated with this dataset. You can use these to organize and group your datasets. You can set this property when inserting or updating a dataset. See Creating and Updating Dataset Labels for more information.
      */
-    labels?: {[key: string]: string};
+    labels?: { [key: string]: string };
     /**
      * [Output-only] The date when this dataset or any of its tables was last modified, in milliseconds since the epoch.
      */
@@ -932,7 +952,7 @@ declare namespace bigquery {
       /**
        * The labels associated with this dataset. You can use these to organize and group your datasets.
        */
-      labels?: {[key: string]: string};
+      labels?: { [key: string]: string };
       /**
        * The geographic location where the data resides.
        */
@@ -979,7 +999,7 @@ declare namespace bigquery {
     /**
      * [Optional] The labels associated with this table. You can use these to organize and group your tables. This will only be used if the destination table is newly created. If the table already exists and labels are different than the current labels are provided, the job will fail.
      */
-    labels?: {[key: string]: string};
+    labels?: { [key: string]: string };
   };
 
   /**
@@ -1788,6 +1808,10 @@ declare namespace bigquery {
      */
     id?: string;
     /**
+     * [Output-only] If set, it provides the reason why a Job was created. If not set, it should be treated as the default: REQUESTED. This feature is not yet available. Jobs will always be created.
+     */
+    jobCreationReason?: any;
+    /**
      * [Optional] Reference describing the unique-per-user name of the job.
      */
     jobReference?: IJobReference;
@@ -1848,7 +1872,7 @@ declare namespace bigquery {
     /**
      * The labels associated with this job. You can use these to organize and group your jobs. Label keys and values can be no longer than 63 characters, can only contain lowercase letters, numeric characters, underscores and dashes. International characters are allowed. Label values are optional. Label keys must start with a letter and each label in the list must have a different key.
      */
-    labels?: {[key: string]: string};
+    labels?: { [key: string]: string };
     /**
      * [Pick one] Configures a load job.
      */
@@ -2121,7 +2145,7 @@ declare namespace bigquery {
     /**
      * [Optional] If querying an external data source outside of BigQuery, describes the data format, location and other properties of the data source. By defining these properties, the data source can then be queried as if it were a standard BigQuery table.
      */
-    tableDefinitions?: {[key: string]: IExternalDataConfiguration};
+    tableDefinitions?: { [key: string]: IExternalDataConfiguration };
     /**
      * Time-based partitioning specification for the destination table. Only one of timePartitioning and rangePartitioning should be specified.
      */
@@ -2177,6 +2201,21 @@ declare namespace bigquery {
      * [Optional] Specifies the action that occurs if the destination table already exists. The following values are supported: WRITE_TRUNCATE: If the table already exists, BigQuery overwrites the table data. WRITE_APPEND: If the table already exists, BigQuery appends the data to the table. WRITE_EMPTY: If the table already exists and contains data, a 'duplicate' error is returned in the job result. The default value is WRITE_EMPTY. Each action is atomic and only occurs if BigQuery is able to complete the job successfully. Creation, truncation and append actions occur as one atomic update upon job completion.
      */
     writeDisposition?: string;
+  };
+
+  /**
+   * Reason about why a Job was created from a [`jobs.query`](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/query) method when used with `JOB_CREATION_OPTIONAL` Job creation mode. For [`jobs.insert`](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/insert) method calls it will always be `REQUESTED`. This feature is not yet available. Jobs will always be created.
+   */
+  type IJobCreationReason = {
+    /**
+     * Output only. Specifies the high level reason why a Job was created.
+     */
+    code?:
+      | 'CODE_UNSPECIFIED'
+      | 'REQUESTED'
+      | 'LONG_RUNNING'
+      | 'LARGE_RESULTS'
+      | 'OTHER';
   };
 
   type IJobList = {
@@ -2368,7 +2407,7 @@ declare namespace bigquery {
      */
     ddlOperationPerformed?: string;
     /**
-     * [Output only] The DDL target dataset. Present only for CREATE/ALTER/DROP SCHEMA queries.
+     * [Output only] The DDL target dataset. Present only for CREATE/ALTER/DROP/UNDROP SCHEMA queries.
      */
     ddlTargetDataset?: IDatasetReference;
     /**
@@ -2549,7 +2588,7 @@ declare namespace bigquery {
   /**
    * Represents a single JSON object.
    */
-  type IJsonObject = {[key: string]: IJsonValue};
+  type IJsonObject = { [key: string]: IJsonValue };
 
   type IJsonOptions = {
     /**
@@ -2560,6 +2599,9 @@ declare namespace bigquery {
 
   type IJsonValue = any;
 
+  /**
+   * Response format for a single page when listing BigQuery ML models.
+   */
   type IListModelsResponse = {
     /**
      * Models in the requested dataset. Only the following fields are populated: model_reference, model_type, creation_time, last_modified_time and labels.
@@ -2571,6 +2613,9 @@ declare namespace bigquery {
     nextPageToken?: string;
   };
 
+  /**
+   * Describes the format of a single result page when listing routines.
+   */
   type IListRoutinesResponse = {
     /**
      * A token to request the next page of results.
@@ -2696,7 +2741,7 @@ declare namespace bigquery {
     /**
      * The labels associated with this model. You can use these to organize and group your models. Label keys and values can be no longer than 63 characters, can only contain lowercase letters, numeric characters, underscores and dashes. International characters are allowed. Label values are optional. Label keys must start with a letter and each label in the list must have a different key.
      */
-    labels?: {[key: string]: string};
+    labels?: { [key: string]: string };
     /**
      * Output only. The time when this model was last modified, in millisecs since the epoch.
      */
@@ -2854,6 +2899,16 @@ declare namespace bigquery {
     principalComponentId?: string;
   };
 
+  /**
+   * Represents privacy policy that contains the privacy requirements specified by the data owner. Currently, this is only supported on views.
+   */
+  type IPrivacyPolicy = {
+    /**
+     * Optional. Policy used for aggregation thresholds.
+     */
+    aggregationThresholdPolicy?: IAggregationThresholdPolicy;
+  };
+
   type IProjectList = {
     /**
      * A hash of the page of results
@@ -2926,6 +2981,10 @@ declare namespace bigquery {
      */
     arrayType?: IQueryParameterType;
     /**
+     * [Optional] The element type of the range, if this is a range.
+     */
+    rangeElementType?: IQueryParameterType;
+    /**
      * [Optional] The types of the fields of this struct, in order, if this is a struct.
      */
     structTypes?: Array<{
@@ -2954,9 +3013,13 @@ declare namespace bigquery {
      */
     arrayValues?: Array<IQueryParameterValue>;
     /**
+     * [Optional] The range value, if this is a range type.
+     */
+    rangeValue?: { end?: IQueryParameterValue; start?: IQueryParameterValue };
+    /**
      * [Optional] The struct field values, in order of the struct type's declaration.
      */
-    structValues?: {[key: string]: IQueryParameterValue};
+    structValues?: { [key: string]: IQueryParameterValue };
     /**
      * [Optional] The value of this value, if a simple scalar type.
      */
@@ -2985,13 +3048,17 @@ declare namespace bigquery {
      */
     dryRun?: boolean;
     /**
+     * Optional. If not set, jobs are always required. If set, the query request will follow the behavior described JobCreationMode. This feature is not yet available. Jobs will always be created.
+     */
+    jobCreationMode?: string;
+    /**
      * The resource type of the request.
      */
     kind?: string;
     /**
      * The labels associated with this job. You can use these to organize and group your jobs. Label keys and values can be no longer than 63 characters, can only contain lowercase letters, numeric characters, underscores and dashes. International characters are allowed. Label values are optional. Label keys must start with a letter and each label in the list must have a different key.
      */
-    labels?: {[key: string]: string};
+    labels?: { [key: string]: string };
     /**
      * The geographic location where the job should run. See details at https://cloud.google.com/bigquery/docs/locations#specifying_your_location.
      */
@@ -3056,6 +3123,10 @@ declare namespace bigquery {
      */
     jobComplete?: boolean;
     /**
+     * Optional. Only relevant when a job_reference is present in the response. If job_reference is not present it will always be unset. When job_reference is present, this field should be interpreted as follows: If set, it will provide the reason of why a Job was created. If not set, it should be treated as the default: REQUESTED. This feature is not yet available. Jobs will always be created.
+     */
+    jobCreationReason?: any;
+    /**
      * Reference to the Job that was created to run the query. This field will be present even if the original request timed out, in which case GetQueryResults can be used to read the results once the query has completed. Since this API only returns the first page of results, subsequent pages can be fetched via the same mechanism (GetQueryResults).
      */
     jobReference?: IJobReference;
@@ -3071,6 +3142,10 @@ declare namespace bigquery {
      * A token used for paging results.
      */
     pageToken?: string;
+    /**
+     * Query ID for the completed query. This ID will be auto-generated. This field is not yet available and it is currently not guaranteed to be populated.
+     */
+    queryId?: string;
     /**
      * An object with as many results as can be contained within the maximum permitted reply size. To get any additional rows, you can call GetQueryResults and specify the jobReference returned above.
      */
@@ -3145,6 +3220,20 @@ declare namespace bigquery {
   };
 
   /**
+   * Represents the value of a range.
+   */
+  type IRangeValue = {
+    /**
+     * Optional. The end value of the range. A missing value represents an unbounded end.
+     */
+    end?: IQueryParameterValue;
+    /**
+     * Optional. The start value of the range. A missing value represents an unbounded start.
+     */
+    start?: IQueryParameterValue;
+  };
+
+  /**
    * Evaluation metrics used by weighted-ALS models specified by feedback_type=implicit.
    */
   type IRankingMetrics = {
@@ -3211,7 +3300,7 @@ declare namespace bigquery {
     /**
      * User-defined context as a set of key/value pairs, which will be sent as function invocation context together with batched arguments in the requests to the remote service. The total number of bytes of keys and values must be less than 8KB.
      */
-    userDefinedContext?: {[key: string]: string};
+    userDefinedContext?: { [key: string]: string };
   };
 
   /**
@@ -3241,7 +3330,12 @@ declare namespace bigquery {
       | 'REMOTE_SERVICE_TYPE_UNSPECIFIED'
       | 'CLOUD_AI_TRANSLATE_V3'
       | 'CLOUD_AI_VISION_V1'
-      | 'CLOUD_AI_NATURAL_LANGUAGE_V1';
+      | 'CLOUD_AI_NATURAL_LANGUAGE_V1'
+      | 'CLOUD_AI_SPEECH_TO_TEXT_V2';
+    /**
+     * Output only. The name of the speech recognizer to use for speech recognition. The expected format is `projects/{project}/locations/{location}/recognizers/{recognizer}`. Customers can specify this field at model creation. If not specified, a default recognizer `projects/{model project}/locations/global/recognizers/_` will be used. See more details at [recognizers](https://cloud.google.com/speech-to-text/v2/docs/reference/rest/v2/projects.locations.recognizers)
+     */
+    speechRecognizer?: string;
   };
 
   /**
@@ -3257,7 +3351,7 @@ declare namespace bigquery {
      */
     creationTime?: string;
     /**
-     * Optional. Data governance specific option, if the value is DATA_MASKING, the function will be validated as masking functions.
+     * Optional. If set to `DATA_MASKING`, the function is validated and made available as a masking function. For more information, see [Create custom masking routines](https://cloud.google.com/bigquery/docs/user-defined-functions#custom-mask).
      */
     dataGovernanceType?: 'DATA_GOVERNANCE_TYPE_UNSPECIFIED' | 'DATA_MASKING';
     /**
@@ -3323,11 +3417,15 @@ declare namespace bigquery {
       | 'TABLE_VALUED_FUNCTION'
       | 'AGGREGATE_FUNCTION';
     /**
+     * Optional. The security mode of the routine, if defined. If not defined, the security mode is automatically determined from the routine's configuration.
+     */
+    securityMode?: 'SECURITY_MODE_UNSPECIFIED' | 'DEFINER' | 'INVOKER';
+    /**
      * Optional. Spark specific options.
      */
     sparkOptions?: ISparkOptions;
     /**
-     * Optional. Can be set for procedures only. If true (default), the definition body will be validated in the creation and the updates of the procedure. For procedures with an argument of ANY TYPE, the definition body validtion is not supported at creation/update time, and thus this field must be set to false explicitly.
+     * Optional. Use this option to catch many common errors. Error checking is not exhaustive, and successfully creating a procedure doesn't guarantee that the procedure will successfully execute at runtime. If `strictMode` is set to `TRUE`, the procedure body is further checked for errors such as non-existent tables or columns. The `CREATE PROCEDURE` statement fails if the body fails any of these checks. If `strictMode` is set to `FALSE`, the procedure body is checked only for syntax. For procedures that invoke themselves recursively, specify `strictMode=FALSE` to avoid non-existent procedure errors during validation. Default value is `TRUE`.
      */
     strictMode?: boolean;
   };
@@ -3498,11 +3596,11 @@ declare namespace bigquery {
     /**
      * [Output-only] Project ID used for logging
      */
-    project_id?: string;
+    projectId?: string;
     /**
      * [Output-only] Resource type used for logging
      */
-    resource_type?: string;
+    resourceType?: string;
   };
 
   /**
@@ -3540,7 +3638,7 @@ declare namespace bigquery {
     /**
      * Configuration properties as a set of key/value pairs, which will be passed on to the Spark application. For more information, see [Apache Spark](https://spark.apache.org/docs/latest/index.html) and the [procedure option list](https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language#procedure_option_list).
      */
-    properties?: {[key: string]: string};
+    properties?: { [key: string]: string };
     /**
      * Python files to be placed on the PYTHONPATH for PySpark application. Supported file types: `.py`, `.egg`, and `.zip`. For more information about Apache Spark, see [Apache Spark](https://spark.apache.org/docs/latest/index.html).
      */
@@ -3555,7 +3653,7 @@ declare namespace bigquery {
     /**
      * [Output-only] Endpoints generated for the Spark job.
      */
-    endpoints?: {[key: string]: string};
+    endpoints?: { [key: string]: string };
     /**
      * [Output-only] Logging info is used to generate a link to Cloud Logging.
      */
@@ -3624,7 +3722,15 @@ declare namespace bigquery {
     type?: IStandardSqlDataType;
   };
 
-  type IStandardSqlStructType = {fields?: Array<IStandardSqlField>};
+  /**
+   * The representation of a SQL STRUCT type.
+   */
+  type IStandardSqlStructType = {
+    /**
+     * Fields within the struct.
+     */
+    fields?: Array<IStandardSqlField>;
+  };
 
   /**
    * A table type
@@ -3721,7 +3827,7 @@ declare namespace bigquery {
     /**
      * The labels associated with this table. You can use these to organize and group your tables. Label keys and values can be no longer than 63 characters, can only contain lowercase letters, numeric characters, underscores and dashes. International characters are allowed. Label values are optional. Label keys must start with a letter and each label in the list must have a different key.
      */
-    labels?: {[key: string]: string};
+    labels?: { [key: string]: string };
     /**
      * [Output-only] The time when this table was last modified, in milliseconds since the epoch.
      */
@@ -3799,6 +3905,10 @@ declare namespace bigquery {
      */
     requirePartitionFilter?: boolean;
     /**
+     * [Optional] The tags associated with this table. Tag keys are globally unique. See additional information on [tags](https://cloud.google.com/iam/docs/tags-access-control#definitions). An object containing a list of "key": value pairs. The key is the namespaced friendly name of the tag key, e.g. "12345/environment" where 12345 is parent id. The value is the friendly short name of the tag value, e.g. "production".
+     */
+    resourceTags?: { [key: string]: string };
+    /**
      * [Optional] Describes the schema of this table.
      */
     schema?: ITableSchema;
@@ -3836,7 +3946,7 @@ declare namespace bigquery {
     view?: IViewDefinition;
   };
 
-  type ITableCell = {v?: any};
+  type ITableCell = { v?: any };
 
   type ITableConstraints = {
     /**
@@ -3857,7 +3967,7 @@ declare namespace bigquery {
     /**
      * [Optional] The primary key of the table.
      */
-    primaryKey?: {columns?: Array<string>};
+    primaryKey?: { columns?: Array<string> };
   };
 
   type ITableDataInsertAllRequest = {
@@ -4050,7 +4160,7 @@ declare namespace bigquery {
       /**
        * The labels associated with this table. You can use these to organize and group your tables.
        */
-      labels?: {[key: string]: string};
+      labels?: { [key: string]: string };
       /**
        * The range partitioning specification for this table, if configured.
        */
@@ -4521,7 +4631,7 @@ declare namespace bigquery {
     /**
      * Weights associated with each label class, for rebalancing the training data. Only applicable for classification models.
      */
-    labelClassWeights?: {[key: string]: number};
+    labelClassWeights?: { [key: string]: number };
     /**
      * Learning rate in training. Used only for iterative training algorithms.
      */
@@ -4780,6 +4890,24 @@ declare namespace bigquery {
     resourceUri?: string;
   };
 
+  /**
+   * Statistics for a vector search query. Populated as part of JobStatistics2.
+   */
+  type IVectorSearchStatistics = {
+    /**
+     * When `indexUsageMode` is `UNUSED` or `PARTIALLY_USED`, this field explains why indexes were not used in all or part of the vector search query. If `indexUsageMode` is `FULLY_USED`, this field is not populated.
+     */
+    indexUnusedReasons?: Array<IIndexUnusedReason>;
+    /**
+     * Specifies the index usage mode for the query.
+     */
+    indexUsageMode?:
+      | 'INDEX_USAGE_MODE_UNSPECIFIED'
+      | 'UNUSED'
+      | 'PARTIALLY_USED'
+      | 'FULLY_USED';
+  };
+
   type IViewDefinition = {
     /**
      * [Required] A query that BigQuery executes when the view is referenced.
@@ -4808,6 +4936,16 @@ declare namespace bigquery {
        * If True, delete all the tables in the dataset. If False and the dataset contains tables, the request will fail. Default is False
        */
       deleteContents?: boolean;
+    };
+
+    /**
+     * Returns the dataset specified by datasetID.
+     */
+    type IGetParams = {
+      /**
+       * Specifies the view that determines which dataset information is returned. By default, metadata and ACL information are returned. Allowed values: METADATA, ACL, FULL.
+       */
+      datasetView?: string;
     };
 
     /**
@@ -5091,3 +5229,4 @@ declare namespace bigquery {
 }
 
 export default bigquery;
+
